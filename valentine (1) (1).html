@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Notes ✉️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Carattere&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink-soft: #FFE5EC;
+            --pink-medium: #FFB3C6;
+            --pink-deep: #FF8FAB;
+            --red-warm: #FB6F92;
+            --cream: #FFF8F0;
+            --text-dark: #5C3A47;
+            --shadow: rgba(251, 111, 146, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, var(--pink-soft) 0%, var(--cream) 50%, #FFF5E6 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: var(--text-dark);
+            position: relative;
+        }
+
+        /* Floating hearts background */
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .heart-float {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0;
+            animation: float-up 8s ease-in infinite;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fade-in-down 1s ease-out;
+        }
+
+        h1 {
+            font-family: 'Carattere', cursive;
+            font-size: clamp(3rem, 10vw, 6rem);
+            color: var(--red-warm);
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 0px var(--pink-medium);
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            font-weight: 300;
+            font-style: italic;
+        }
+
+        /* Love letter envelope */
+        .envelope-container {
+            perspective: 1000px;
+            margin-bottom: 60px;
+            animation: fade-in-up 1s ease-out 0.3s backwards;
+        }
+
+        .envelope {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope:hover {
+            transform: translateY(-5px) scale(1.02);
+        }
+
+        .envelope-body {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px var(--shadow);
+            position: relative;
+            border: 3px solid var(--pink-medium);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 252px solid transparent;
+            border-right: 252px solid transparent;
+            border-top: 150px solid var(--pink-deep);
+            transform-origin: top center;
+            transition: transform 0.6s ease;
+            z-index: -1;
+        }
+
+        .envelope.open .envelope-flap {
+            transform: translateX(-50%) rotateX(180deg);
+        }
+
+        .letter-content {
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            line-height: 1.8;
+            color: var(--text-dark);
+            text-align: center;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s ease, opacity 0.6s ease;
+            opacity: 0;
+        }
+
+        .envelope.open .letter-content {
+            max-height: 500px;
+            opacity: 1;
+        }
+
+        .seal {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background: var(--red-warm);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            border: 4px solid white;
+            box-shadow: 0 4px 15px var(--shadow);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.1); }
+        }
+
+        /* Love counter */
+        .love-counter {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px var(--shadow);
+            text-align: center;
+            margin-bottom: 40px;
+            border: 3px solid var(--pink-medium);
+            animation: fade-in-up 1s ease-out 0.6s backwards;
+        }
+
+        .counter-title {
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--red-warm);
+        }
+
+        .counter-display {
+            font-size: 4rem;
+            font-weight: 600;
+            color: var(--red-warm);
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px var(--shadow);
+        }
+
+        .heart-btn {
+            background: linear-gradient(135deg, var(--pink-deep) 0%, var(--red-warm) 100%);
+            border: none;
+            color: white;
+            font-size: 3rem;
+            padding: 20px 40px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px var(--shadow);
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .heart-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px var(--shadow);
+        }
+
+        .heart-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Memory wall */
+        .memory-wall {
+            animation: fade-in-up 1s ease-out 0.9s backwards;
+        }
+
+        .memory-wall h2 {
+            font-family: 'Carattere', cursive;
+            font-size: 3rem;
+            text-align: center;
+            color: var(--red-warm);
+            margin-bottom: 30px;
+        }
+
+        .polaroid-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .polaroid {
+            background: white;
+            padding: 15px;
+            padding-bottom: 60px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transform: rotate(-2deg);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .polaroid:nth-child(even) {
+            transform: rotate(2deg);
+        }
+
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.05);
+            z-index: 10;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .polaroid-img {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, var(--pink-soft) 0%, var(--pink-medium) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            border-radius: 5px;
+        }
+
+        .polaroid-caption {
+            font-family: 'Caveat', cursive;
+            font-size: 1.3rem;
+            text-align: center;
+            margin-top: 15px;
+            color: var(--text-dark);
+        }
+
+        /* Add memory form */
+        .add-memory {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px var(--shadow);
+            border: 3px solid var(--pink-medium);
+        }
+
+        .add-memory h3 {
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            color: var(--red-warm);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--pink-medium);
+            border-radius: 10px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--red-warm);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: 'Caveat', cursive;
+            font-size: 1.3rem;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--pink-deep) 0%, var(--red-warm) 100%);
+            border: none;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%;
+            box-shadow: 0 4px 15px var(--shadow);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow);
+        }
+
+        /* Animations */
+        @keyframes fade-in-down {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating heart burst effect */
+        .heart-burst {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+            font-size: 2rem;
+            animation: burst 1s ease-out forwards;
+        }
+
+        @keyframes burst {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3.5rem;
+            }
+            .envelope-flap {
+                border-left: 180px solid transparent;
+                border-right: 180px solid transparent;
+                border-top: 110px solid var(--pink-deep);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating hearts background -->
+    <div class="hearts-bg" id="heartsContainer"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Love Notes</h1>
+            <p class="subtitle">A little space for all the love in the world ✨</p>
+        </header>
+
+        <!-- Love Letter Envelope -->
+        <div class="envelope-container">
+            <div class="envelope" id="envelope">
+                <div class="envelope-body">
+                    <div class="envelope-flap"></div>
+                    <div class="letter-content">
+                        <p>Dear Mary,</p>
+                        <p>Every moment with you is like finding a treasure. Your smile brightens my darkest days, and your laughter is my favorite melody and I really miss you.Although we are not together for now I am trying my best to be with you. 💕</p>
+                        <p>Forever yours,<br>Your Valentine</p>
+                    </div>
+                    <div class="seal">💌</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Love Counter -->
+        <div class="love-counter">
+            <div class="counter-title">Sending all my love to Hiroshima!!!</div>
+            <div class="counter-display" id="loveCount">0</div>
+            <button class="heart-btn" id="heartBtn">❤️</button>
+        </div>
+
+        <!-- Memory Wall -->
+        <div class="memory-wall">
+            <h2>Memory Wall</h2>
+            <div class="polaroid-grid" id="polaroidGrid">
+                <div class="polaroid">
+                    <div class="polaroid-img">
+<div class="polaroid-img">
+    <img src="first.jpg" style="width:100%; height:100%; object-fit:cover; border-radius:5px;">
+</div>
+                    </div>
+                    <div class="polaroid-caption">Happy Moments</div>
+                </div>
+                <div class="polaroid">
+<div class="polaroid-img">
+    <img src="second.jpg" style="width:100%; height:100%; object-fit:cover; border-radius:5px;">
+</div>
+                    <div class="polaroid-caption">Happy Hours</div>
+                </div>
+                <div class="polaroid">
+<div class="polaroid-img">
+    <img src="third.jpg" style="width:100%; height:100%; object-fit:cover; border-radius:5px;">
+</div>
+                    <div class="polaroid-caption">Happy Days</div>
+                </div>
+            </div>
+
+            <!-- Add Memory Form -->
+            <div class="add-memory">
+                <h3>Add Your Memory</h3>
+                <form id="memoryForm">
+                    <div class="form-group">
+<input type="file" id="memoryPhoto" accept="image/*" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="memoryText" placeholder="What makes this memory special?" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Add to Memory Wall</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Floating hearts background
+        function createFloatingHeart() {
+            const heartsContainer = document.getElementById('heartsContainer');
+            const heart = document.createElement('div');
+            heart.className = 'heart-float';
+            heart.textContent = ['❤️', '💕', '💖', '💗', '💝'][Math.floor(Math.random() * 5)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            heart.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            heartsContainer.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 10000);
+        }
+
+        // Create hearts continuously
+        setInterval(createFloatingHeart, 800);
+
+        // Envelope interaction
+        const envelope = document.getElementById('envelope');
+        envelope.addEventListener('click', () => {
+            envelope.classList.toggle('open');
+        });
+
+        // Love counter
+        let loveCount = 0;
+        const loveCountDisplay = document.getElementById('loveCount');
+        const heartBtn = document.getElementById('heartBtn');
+
+        heartBtn.addEventListener('click', (e) => {
+            loveCount++;
+            loveCountDisplay.textContent = loveCount;
+            
+            // Create heart burst effect
+            createHeartBurst(e.clientX, e.clientY);
+        });
+
+        function createHeartBurst(x, y) {
+            for (let i = 0; i < 8; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart-burst';
+                heart.textContent = '💖';
+                heart.style.left = x + 'px';
+                heart.style.top = y + 'px';
+                
+                const angle = (Math.PI * 2 * i) / 8;
+                const distance = 100;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                
+                heart.style.setProperty('--tx', tx + 'px');
+                heart.style.setProperty('--ty', ty + 'px');
+                
+                document.body.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 1000);
+            }
+        }
+
+        // Memory form
+        const memoryForm = document.getElementById('memoryForm');
+        const polaroidGrid = document.getElementById('polaroidGrid');
+
+        memoryForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+const fileInput = document.getElementById('memoryPhoto');
+const file = fileInput.files[0];
+const text = document.getElementById('memoryText').value;
+
+if (!file) return;
+
+const reader = new FileReader();
+
+reader.onload = function(event) {
+    const imageUrl = event.target.result;
+
+    const polaroid = document.createElement('div');
+    polaroid.className = 'polaroid';
+    polaroid.innerHTML = `
+        <div class="polaroid-img">
+            <img src="${imageUrl}" style="width:100%; height:100%; object-fit:cover; border-radius:5px;">
+        </div>
+        <div class="polaroid-caption">${text}</div>
+    `;
+
+    polaroidGrid.appendChild(polaroid);
+
+    memoryForm.reset();
+
+    setTimeout(() => {
+        polaroid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+};
+
+reader.readAsDataURL(file);
+            
+            // Create new polaroid
+            const polaroid = document.createElement('div');
+            polaroid.className = 'polaroid';
+            polaroid.innerHTML = `
+                <div class="polaroid-img">${emoji}</div>
+                <div class="polaroid-caption">${text}</div>
+            `;
+            
+            polaroidGrid.appendChild(polaroid);
+            
+            // Reset form
+            memoryForm.reset();
+            
+            // Scroll to new polaroid
+            setTimeout(() => {
+                polaroid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        });
+    </script>
+</body>
+</html>
